@@ -1,33 +1,43 @@
-// components/Form.js
 import React, { useState } from "react";
-import Avatar from "./Avatar";
-import InputGroup from "./InputGroup";
+import Avatar from "./Avatar"; 
+import "../App.css";
 
-const Form = () => {
+const LoginForm = ({ fields, buttons }) => {
   const [isTyping, setIsTyping] = useState(false);
+
+  const handleFocus = (type) => {
+    setIsTyping(type === "password");
+  };
 
   return (
     <form>
       <Avatar isTyping={isTyping} />
-      <InputGroup
-        label="Email"
-        type="text"
-        id="email"
-        onFocus={() => setIsTyping(false)}
-        onBlur={() => setIsTyping(false)}
-      />
-      <InputGroup
-        label="Password"
-        type="password"
-        id="password"
-        onFocus={() => setIsTyping(true)}
-        onBlur={() => setIsTyping(false)}
-      />
+      {fields.map((field, index) => (
+        <div className={`inputGroup ${field.id}`} key={index}>
+          <label htmlFor={field.id}>{field.label}</label>
+          <input
+            type={field.type}
+            id={field.id}
+            onFocus={() => handleFocus(field.type)}
+            onBlur={() => handleFocus("")}
+            onChange={field.onChange}
+          />
+        </div>
+      ))}
       <div className="inputGroup">
-        <button type="submit">Log in</button>
+        {buttons.map((button, index) => (
+          <button
+            key={index}
+            type={button.type}
+            onClick={button.onClick}
+            style={{ backgroundColor: button.color || "#4eb8dd" }}
+          >
+            {button.label}
+          </button>
+        ))}
       </div>
     </form>
   );
 };
 
-export default Form;
+export default LoginForm;
